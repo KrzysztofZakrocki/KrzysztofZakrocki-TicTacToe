@@ -1,12 +1,7 @@
 package com.kodilla;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,9 +11,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class TicTacToe extends Application {
-
-    Player whoStart = null;
-    Player secondPlayer = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -37,6 +29,8 @@ public class TicTacToe extends Application {
 
     private Parent createBoard() {
 
+        GameMechanics myGame = null;
+
         Label whoStartsLabel = new Label("Kto rozpoczyna kolejna runde?");
         whoStartsLabel.setFont(fontInApplication());
 
@@ -52,11 +46,9 @@ public class TicTacToe extends Application {
         computerStarts.setToggleGroup(toggleGroupWhoStart);
 
         if(toggleGroupWhoStart.getSelectedToggle() == playerStarts) {
-            whoStart = new User();
-            secondPlayer = new Computer();
+            myGame = new GameMechanics(new User());
         } else if(toggleGroupWhoStart.getSelectedToggle() == computerStarts) {
-            whoStart = new Computer();
-            secondPlayer = new User();
+            myGame = new GameMechanics(new Computer());
         }
 
         Label whatShape = new Label("Wybierz ksztalt: ");
@@ -74,59 +66,48 @@ public class TicTacToe extends Application {
         chooseCross.setToggleGroup(toggleGroupWhatShape);
 
         if(toggleGroupWhatShape.getSelectedToggle() == chooseCircle) {
-            whoStart.setActualShape(new Circle());
-            secondPlayer.setActualShape(new Cross());
+            myGame.getGameStatus().getActualPlayer().setActualShape(new Circle());
+            myGame.getGameStatus().getSecondPlayer().setActualShape(new Cross());
         }else if(toggleGroupWhatShape.getSelectedToggle() == chooseCross) {
-            whoStart.setActualShape(new Cross());
-            secondPlayer.setActualShape(new Circle());
+            myGame.getGameStatus().getActualPlayer().setActualShape(new Cross());
+            myGame.getGameStatus().getSecondPlayer().setActualShape(new Circle());
         }
-
-        GameMechanics myGame = new GameMechanics(whoStart);
 
         Button button1 = new Button("");
         button1.setMinSize(116,108);
         button1.setId("1");
-        button1.setOnMousePressed((event) -> myGame.clickButton(button1));
 
         Button button2 = new Button("");
         button2.setMinSize(116,108);
         button2.setId("2");
-        button2.setOnMousePressed((event) -> myGame.clickButton(button2));
 
         Button button3 = new Button("");
         button3.setMinSize(116,108);
         button3.setId("3");
-        button3.setOnMousePressed((event) -> myGame.clickButton(button3));
 
         Button button4 = new Button("");
         button4.setMinSize(116,108);
         button4.setId("4");
-        button4.setOnMousePressed((event) -> myGame.clickButton(button4));
 
         Button button5 = new Button("");
         button5.setMinSize(116,108);
         button5.setId("5");
-        button5.setOnMousePressed((event) -> myGame.clickButton(button5));
 
         Button button6 = new Button("");
         button6.setMinSize(116,108);
         button6.setId("6");
-        button6.setOnMousePressed((event) -> myGame.clickButton(button6));
 
         Button button7 = new Button("");
         button7.setMinSize(116,108);
         button7.setId("7");
-        button7.setOnMousePressed((event) -> myGame.clickButton(button7));
 
         Button button8 = new Button("");
         button8.setMinSize(116,108);
         button8.setId("8");
-        button8.setOnMousePressed((event) -> myGame.clickButton(button8));
 
         Button button9 = new Button("");
         button9.setMinSize(116,108);
         button9.setId("9");
-        button9.setOnMousePressed((event) -> myGame.clickButton(button9));
 
         Button newGameButton = new Button("Rozpocznij nowa gre");
         newGameButton.setFont(fontInApplication());
@@ -136,7 +117,7 @@ public class TicTacToe extends Application {
         helloLabel.setPadding(new Insets(10,10,10,60));
 
 
-        ImageView currentRound = new ImageView(whoStart.getActualShape().getShape());
+        ImageView currentRound = new ImageView(myGame.getGameStatus().getActualPlayer().getActualShape().getShape());
 
         Label currentRoundLabel = new Label("Tura gracza: ");
         currentRoundLabel.setFont(fontInApplication());
@@ -170,6 +151,20 @@ public class TicTacToe extends Application {
 
         grid.add(newGameButton,5,0,1,1);
 
+
+       /* if (whoStart) {
+            button1.setOnMousePressed((event) -> myGame.clickButton(button1));
+            button2.setOnMousePressed((event) -> myGame.clickButton(button2));
+            button3.setOnMousePressed((event) -> myGame.clickButton(button3));
+            button4.setOnMousePressed((event) -> myGame.clickButton(button4));
+            button5.setOnMousePressed((event) -> myGame.clickButton(button5));
+            button6.setOnMousePressed((event) -> myGame.clickButton(button6));
+            button7.setOnMousePressed((event) -> myGame.clickButton(button7));
+            button8.setOnMousePressed((event) -> myGame.clickButton(button8));
+            button9.setOnMousePressed((event) -> myGame.clickButton(button9));
+        }else if {
+
+        }*/
         return grid;
     }
 

@@ -15,19 +15,28 @@ public class GameMechanics {
         this.gameStatus = new GameStatus(actualPlayer);
     }
 
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
     public void clickButton(Button button) {
-        int id = 0;
 
-        id = Integer.parseInt(button.getId());
+        Player user = gameStatus.getActualPlayer();
+        Player computer = gameStatus.getSecondPlayer();
 
-        button.setGraphic(new ImageView(gameStatus.getWhoseRound().getActualShape().getShape()));
+        int id = Integer.parseInt(button.getId());
+
+        button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
         setCrossAndCircleInButtonsBasedId(id);
+
+        gameStatus.setActualPlayer(computer);
+        gameStatus.setSecondPlayer(user);
     }
 
     public void setCrossAndCircleInButtonsBasedId(int buttonID) {
 
         Map temporaryMap = gameStatus.getGameBoard();
-        temporaryMap.put(buttonID, gameStatus.getWhoseRound());
+        temporaryMap.put(buttonID, gameStatus.getActualPlayer());
         gameStatus.setGameBoard(temporaryMap);
     }
 
