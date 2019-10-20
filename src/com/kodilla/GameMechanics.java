@@ -2,8 +2,6 @@ package com.kodilla;
 
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,16 +19,13 @@ public class GameMechanics {
 
     public void clickButton(Button button) {
 
-        Player user = gameStatus.getActualPlayer();
-        Player computer = gameStatus.getSecondPlayer();
-
         int id = Integer.parseInt(button.getId());
 
         button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
         setCrossAndCircleInButtonsBasedId(id);
 
-        gameStatus.setActualPlayer(computer);
-        gameStatus.setSecondPlayer(user);
+        gameStatus.setActualPlayer(new Computer());
+        gameStatus.setSecondPlayer(new User());
     }
 
     public void setCrossAndCircleInButtonsBasedId(int buttonID) {
@@ -40,7 +35,9 @@ public class GameMechanics {
         gameStatus.setGameBoard(temporaryMap);
     }
 
-    /*public void whoWin() {
+    public boolean whoWin() {
+
+        boolean endGame = false;
         Map temporaryMap = gameStatus.getGameBoard();
 
         if (temporaryMap.get(1) == temporaryMap.get(2) && temporaryMap.get(1) == temporaryMap.get(3) ||
@@ -51,9 +48,10 @@ public class GameMechanics {
                 temporaryMap.get(3) == temporaryMap.get(6) && temporaryMap.get(3) == temporaryMap.get(9) ||
                 temporaryMap.get(1) == temporaryMap.get(5) && temporaryMap.get(1) == temporaryMap.get(9) ||
                 temporaryMap.get(3) == temporaryMap.get(5) && temporaryMap.get(3) == temporaryMap.get(7)){
-
+            endGame = true;
         }
-    }*/
+        return endGame;
+    }
 
     public int computerMoveGenerator() {
         Random computerMoveGenerator = new Random();
@@ -77,6 +75,9 @@ public class GameMechanics {
                 }
             }
         }
+        setCrossAndCircleInButtonsBasedId(computerMoveInInt);
+        gameStatus.setActualPlayer(new User());
+        gameStatus.setSecondPlayer(new Computer());
         return computerMoveInInt;
     }
 }

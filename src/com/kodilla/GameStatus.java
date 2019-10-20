@@ -12,10 +12,10 @@ public class GameStatus {
     public GameStatus(Player actualPlayer) {
         this.actualPlayer = actualPlayer;
 
-        if(actualPlayer.equals(new User())) {
-            secondPlayer = new Computer();
-        }else if(actualPlayer.equals(new Computer())){
-            secondPlayer = new User();
+        if(actualPlayer instanceof User) {
+            this.secondPlayer = new Computer();
+        }else if(actualPlayer instanceof Computer){
+            this.secondPlayer = new User();
         }
         gameBoard = new HashMap<>();
     }
@@ -39,8 +39,6 @@ public class GameStatus {
     public void setGameBoard(Map<Integer, Player> gameBoard) {
         this.gameBoard = gameBoard;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

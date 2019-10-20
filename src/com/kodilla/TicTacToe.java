@@ -29,7 +29,7 @@ public class TicTacToe extends Application {
 
     private Parent createBoard() {
 
-        GameMechanics myGame = null;
+        GameMechanics myGame = new GameMechanics(new User());
 
         Label whoStartsLabel = new Label("Kto rozpoczyna kolejna runde?");
         whoStartsLabel.setFont(fontInApplication());
@@ -44,12 +44,6 @@ public class TicTacToe extends Application {
         ToggleGroup toggleGroupWhoStart = new ToggleGroup();
         playerStarts.setToggleGroup(toggleGroupWhoStart);
         computerStarts.setToggleGroup(toggleGroupWhoStart);
-
-        if(toggleGroupWhoStart.getSelectedToggle() == playerStarts) {
-            myGame = new GameMechanics(new User());
-        } else if(toggleGroupWhoStart.getSelectedToggle() == computerStarts) {
-            myGame = new GameMechanics(new Computer());
-        }
 
         Label whatShape = new Label("Wybierz ksztalt: ");
         whatShape.setFont(fontInApplication());
@@ -116,7 +110,6 @@ public class TicTacToe extends Application {
         helloLabel.setFont(new Font("Arial", 18));
         helloLabel.setPadding(new Insets(10,10,10,60));
 
-
         ImageView currentRound = new ImageView(myGame.getGameStatus().getActualPlayer().getActualShape().getShape());
 
         Label currentRoundLabel = new Label("Tura gracza: ");
@@ -151,20 +144,31 @@ public class TicTacToe extends Application {
 
         grid.add(newGameButton,5,0,1,1);
 
+        boolean endGame = false;
 
-       /* if (whoStart) {
-            button1.setOnMousePressed((event) -> myGame.clickButton(button1));
-            button2.setOnMousePressed((event) -> myGame.clickButton(button2));
-            button3.setOnMousePressed((event) -> myGame.clickButton(button3));
-            button4.setOnMousePressed((event) -> myGame.clickButton(button4));
-            button5.setOnMousePressed((event) -> myGame.clickButton(button5));
-            button6.setOnMousePressed((event) -> myGame.clickButton(button6));
-            button7.setOnMousePressed((event) -> myGame.clickButton(button7));
-            button8.setOnMousePressed((event) -> myGame.clickButton(button8));
-            button9.setOnMousePressed((event) -> myGame.clickButton(button9));
-        }else if {
+        while(!endGame) {
+            if (myGame.getGameStatus().getActualPlayer() instanceof User) {
+                button1.setOnMousePressed((event) -> myGame.clickButton(button1));
+                button2.setOnMousePressed((event) -> myGame.clickButton(button2));
+                button3.setOnMousePressed((event) -> myGame.clickButton(button3));
+                button4.setOnMousePressed((event) -> myGame.clickButton(button4));
+                button5.setOnMousePressed((event) -> myGame.clickButton(button5));
+                button6.setOnMousePressed((event) -> myGame.clickButton(button6));
+                button7.setOnMousePressed((event) -> myGame.clickButton(button7));
+                button8.setOnMousePressed((event) -> myGame.clickButton(button8));
+                button9.setOnMousePressed((event) -> myGame.clickButton(button9));
 
-        }*/
+                endGame = myGame.whoWin();
+            } else if (myGame.getGameStatus().getActualPlayer() instanceof Computer) {
+
+                int buttonID = myGame.computerMove();
+
+                Button button = (Button) grid.lookup(Integer.toString(buttonID));
+                button.setGraphic(new ImageView(myGame.getGameStatus().getActualPlayer().getActualShape().getShape()));
+                endGame = myGame.whoWin();
+            }
+        }
+
         return grid;
     }
 
