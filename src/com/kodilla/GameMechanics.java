@@ -40,14 +40,14 @@ public class GameMechanics {
         boolean endGame = false;
         Map temporaryMap = gameStatus.getGameBoard();
 
-        if (temporaryMap.get(1) == temporaryMap.get(2) && temporaryMap.get(1) == temporaryMap.get(3) ||
-                temporaryMap.get(4) == temporaryMap.get(5) && temporaryMap.get(4) == temporaryMap.get(6) ||
-                temporaryMap.get(7) == temporaryMap.get(8) && temporaryMap.get(7) == temporaryMap.get(9) ||
-                temporaryMap.get(1) == temporaryMap.get(4) && temporaryMap.get(1) == temporaryMap.get(7) ||
-                temporaryMap.get(2) == temporaryMap.get(5) && temporaryMap.get(2) == temporaryMap.get(8) ||
-                temporaryMap.get(3) == temporaryMap.get(6) && temporaryMap.get(3) == temporaryMap.get(9) ||
-                temporaryMap.get(1) == temporaryMap.get(5) && temporaryMap.get(1) == temporaryMap.get(9) ||
-                temporaryMap.get(3) == temporaryMap.get(5) && temporaryMap.get(3) == temporaryMap.get(7)){
+        if (temporaryMap.get(1).equals(temporaryMap.get(2)) && temporaryMap.get(1).equals(temporaryMap.get(3)) ||
+                temporaryMap.get(4).equals(temporaryMap.get(5)) && temporaryMap.get(4).equals(temporaryMap.get(6)) ||
+                temporaryMap.get(7).equals(temporaryMap.get(8)) && temporaryMap.get(7).equals(temporaryMap.get(9)) ||
+                temporaryMap.get(1).equals(temporaryMap.get(4)) && temporaryMap.get(1).equals(temporaryMap.get(7)) ||
+                temporaryMap.get(2).equals(temporaryMap.get(5)) && temporaryMap.get(2).equals(temporaryMap.get(8)) ||
+                temporaryMap.get(3).equals(temporaryMap.get(6)) && temporaryMap.get(3).equals(temporaryMap.get(9)) ||
+                temporaryMap.get(1).equals(temporaryMap.get(5)) && temporaryMap.get(1).equals(temporaryMap.get(9)) ||
+                temporaryMap.get(3).equals(temporaryMap.get(5)) && temporaryMap.get(3).equals(temporaryMap.get(7))) {
             endGame = true;
         }
         return endGame;
