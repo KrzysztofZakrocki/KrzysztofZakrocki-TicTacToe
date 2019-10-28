@@ -1,13 +1,11 @@
 package com.kodilla;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class GameStatus {
 
     private Player actualPlayer;
     private Player secondPlayer;
-    private Map<Integer, Player> gameBoard;
+    private Shape[] gameBoard;
+    private int roundNumber;
 
     public GameStatus(Player actualPlayer) {
         this.actualPlayer = actualPlayer;
@@ -17,7 +15,8 @@ public class GameStatus {
         }else if(actualPlayer instanceof Computer){
             this.secondPlayer = new User();
         }
-        gameBoard = new HashMap<>();
+        roundNumber = 0;
+        gameBoard = new Shape[9];
     }
 
     public Player getActualPlayer() {
@@ -32,26 +31,19 @@ public class GameStatus {
 
     public void setSecondPlayer(Player secondPlayer) { this.secondPlayer = secondPlayer;}
 
-    public Map<Integer, Player> getGameBoard() {
+    public Shape[] getGameBoard() {
         return gameBoard;
     }
 
-    public void setGameBoard(Map<Integer, Player> gameBoard) {
+    public void setGameBoard(Shape[] gameBoard) {
         this.gameBoard = gameBoard;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GameStatus that = (GameStatus) o;
-
-        return gameBoard != null ? gameBoard.equals(that.gameBoard) : that.gameBoard == null;
+    public void setRoundNumber(int roundNumber) {
+        this.roundNumber = roundNumber;
     }
 
-    @Override
-    public int hashCode() {
-        return gameBoard != null ? gameBoard.hashCode() : 0;
+    public int getRoundNumber() {
+        return roundNumber;
     }
 }

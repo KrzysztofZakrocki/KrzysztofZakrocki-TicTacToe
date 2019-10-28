@@ -1,8 +1,10 @@
 package com.kodilla;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
-import java.util.Map;
+import javafx.scene.layout.GridPane;
 import java.util.Random;
 
 public class GameMechanics {
@@ -17,37 +19,53 @@ public class GameMechanics {
         return gameStatus;
     }
 
-    public void clickButton(Button button) {
+    public void clickButton(Button button, GridPane gridPane) {
 
         int id = Integer.parseInt(button.getId());
-
         button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
         setCrossAndCircleInButtonsBasedId(id);
+        gameStatus.setRoundNumber(gameStatus.getRoundNumber() + 1);
 
-        gameStatus.setActualPlayer(new Computer());
-        gameStatus.setSecondPlayer(new User());
+        if(didYouWin() == true) {
+            createMessageBox();
+        }
+
+        changePlayer();
+
+        if (gameStatus.getRoundNumber() != 9) {
+            Button computerButton = (Button) gridPane.lookup(computerMove());
+            computerButton.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
+            gameStatus.setRoundNumber(gameStatus.getRoundNumber()+1);
+
+            if(didYouWin() == true) {
+                createMessageBox();
+            }
+
+            changePlayer();
+        }
     }
 
     public void setCrossAndCircleInButtonsBasedId(int buttonID) {
 
-        Map temporaryMap = gameStatus.getGameBoard();
-        temporaryMap.put(buttonID, gameStatus.getActualPlayer());
-        gameStatus.setGameBoard(temporaryMap);
+        Shape[] temporaryArray = gameStatus.getGameBoard();
+        temporaryArray[buttonID-1] = gameStatus.getActualPlayer().getActualShape();
+        gameStatus.setGameBoard(temporaryArray);
     }
 
-    public boolean whoWin() {
+    public boolean didYouWin() {
 
         boolean endGame = false;
-        Map temporaryMap = gameStatus.getGameBoard();
+        Shape[] temporaryArray = gameStatus.getGameBoard();
 
-        if (temporaryMap.get(1).equals(temporaryMap.get(2)) && temporaryMap.get(1).equals(temporaryMap.get(3)) ||
-                temporaryMap.get(4).equals(temporaryMap.get(5)) && temporaryMap.get(4).equals(temporaryMap.get(6)) ||
-                temporaryMap.get(7).equals(temporaryMap.get(8)) && temporaryMap.get(7).equals(temporaryMap.get(9)) ||
-                temporaryMap.get(1).equals(temporaryMap.get(4)) && temporaryMap.get(1).equals(temporaryMap.get(7)) ||
-                temporaryMap.get(2).equals(temporaryMap.get(5)) && temporaryMap.get(2).equals(temporaryMap.get(8)) ||
-                temporaryMap.get(3).equals(temporaryMap.get(6)) && temporaryMap.get(3).equals(temporaryMap.get(9)) ||
-                temporaryMap.get(1).equals(temporaryMap.get(5)) && temporaryMap.get(1).equals(temporaryMap.get(9)) ||
-                temporaryMap.get(3).equals(temporaryMap.get(5)) && temporaryMap.get(3).equals(temporaryMap.get(7))) {
+        if (temporaryArray[0] == temporaryArray[1] && temporaryArray[1] == temporaryArray[2] && temporaryArray[0] != null ||
+                temporaryArray[3] == temporaryArray[4] && temporaryArray[3] == temporaryArray[5] && temporaryArray[3] != null ||
+                temporaryArray[6] == temporaryArray[7] && temporaryArray[6] == temporaryArray[8] && temporaryArray[6] != null ||
+                temporaryArray[0] == temporaryArray[3] && temporaryArray[0] == temporaryArray[6] && temporaryArray[0] != null ||
+                temporaryArray[1] == temporaryArray[4] && temporaryArray[1] == temporaryArray[7] && temporaryArray[1] != null ||
+                temporaryArray[2] == temporaryArray[5] && temporaryArray[2] == temporaryArray[8] && temporaryArray[2] != null ||
+                temporaryArray[0] == temporaryArray[4] && temporaryArray[0] == temporaryArray[8] && temporaryArray[0] != null ||
+                temporaryArray[2] == temporaryArray[4] && temporaryArray[2] == temporaryArray[6]&& temporaryArray[2] != null) {
+
             endGame = true;
         }
         return endGame;
@@ -59,25 +77,41 @@ public class GameMechanics {
         return computerMove;
     }
 
-    public int computerMove() {
+    public String computerMove() {
 
         boolean correctMove = false;
-        Map<Integer, Player> temporaryMap = gameStatus.getGameBoard();
-        int computerMoveInInt = 0;
+        Shape[] temporaryArray = gameStatus.getGameBoard();
+        int computerMoveInInt = computerMoveGenerator();
 
-        while(correctMove != true) {
-
-            computerMoveInInt = computerMoveGenerator();
-
-            for(Map.Entry<Integer, Player> entry : temporaryMap.entrySet()){
-                if(entry.getKey() != computerMoveInInt) {
-                    correctMove = true;
-                }
+        while(!correctMove) {
+            if (temporaryArray[computerMoveInInt-1] != null) {
+                    computerMoveInInt = computerMoveGenerator();
+            }else {
+                correctMove = true;
             }
         }
+
         setCrossAndCircleInButtonsBasedId(computerMoveInInt);
-        gameStatus.setActualPlayer(new User());
-        gameStatus.setSecondPlayer(new Computer());
-        return computerMoveInInt;
+        return "#" + computerMoveInInt;
+    }
+
+    public void changePlayer() {
+        Player temporaryPlayer = gameStatus.getActualPlayer();
+
+        gameStatus.setActualPlayer(gameStatus.getSecondPlayer());
+        gameStatus.setSecondPlayer(temporaryPlayer);
+    }
+
+    public void createMessageBox() {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Rozpocznij nowa gre", ButtonType.OK);
+        alert.setTitle("Koniec gry");
+        alert.setHeaderText("Koniec gry");
+        alert.setContentText("Wygral " + gameStatus.getActualPlayer());
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+
+            }
+        });
     }
 }

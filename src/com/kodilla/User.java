@@ -13,4 +13,9 @@ public class User implements Player {
     public Shape getActualShape() {
         return actualShape;
     }
+
+    @Override
+    public String toString() {
+        return "Gracz";
+    }
 }
