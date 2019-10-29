@@ -2,9 +2,9 @@ package com.kodilla;
 
 public interface Player {
 
-    public void setActualShape (Shape shape);
-    public Shape getActualShape ();
+    void setActualShape (Shape shape);
+    Shape getActualShape ();
 
     @Override
-    public String toString();
+    String toString();
 }

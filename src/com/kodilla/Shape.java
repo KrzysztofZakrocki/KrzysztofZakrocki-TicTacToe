@@ -4,5 +4,5 @@ import javafx.scene.image.Image;
 
 public interface Shape {
 
-    public Image getShape();
+    Image getShape();
 }

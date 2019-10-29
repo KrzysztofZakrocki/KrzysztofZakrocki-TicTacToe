@@ -10,9 +10,11 @@ import java.util.Random;
 public class GameMechanics {
 
     private GameStatus gameStatus;
+    private Validator gameValidator;
 
     public GameMechanics(Player actualPlayer) {
         this.gameStatus = new GameStatus(actualPlayer);
+        this.gameValidator = new Validator();
     }
 
     public GameStatus getGameStatus() {
@@ -21,63 +23,42 @@ public class GameMechanics {
 
     public void clickButton(Button button, GridPane gridPane) {
 
-        int id = Integer.parseInt(button.getId());
-        button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
-        setCrossAndCircleInButtonsBasedId(id);
-        gameStatus.setRoundNumber(gameStatus.getRoundNumber() + 1);
+        if(gameStatus.getEndGame() == false) {
+            int id = Integer.parseInt(button.getId());
+            button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
+            setCrossAndCircleInButtonsBasedId(id);
+            gameStatus.setRoundNumber(gameStatus.getRoundNumber() + 1);
 
-        if(didYouWin() == true) {
-            createMessageBox();
-        }
-
-        changePlayer();
-
-        if (gameStatus.getRoundNumber() != 9) {
-            Button computerButton = (Button) gridPane.lookup(computerMove());
-            computerButton.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
-            gameStatus.setRoundNumber(gameStatus.getRoundNumber()+1);
-
-            if(didYouWin() == true) {
+            if (gameValidator.checkDidYouWin(gameStatus.getGameBoard())) {
+                gameStatus.setEndGame(true);
                 createMessageBox();
             }
 
             changePlayer();
         }
+
+        if (gameStatus.getRoundNumber() != 9 && gameStatus.getEndGame() == false) {
+            computerClickButton(gridPane);
+        }
+
+        if (gameStatus.getRoundNumber() == 9 && gameStatus.getEndGame() == false) {
+            createDrawBox();
+        }
     }
 
-    public void setCrossAndCircleInButtonsBasedId(int buttonID) {
+    private void setCrossAndCircleInButtonsBasedId(int buttonID) {
 
         Shape[] temporaryArray = gameStatus.getGameBoard();
         temporaryArray[buttonID-1] = gameStatus.getActualPlayer().getActualShape();
         gameStatus.setGameBoard(temporaryArray);
     }
 
-    public boolean didYouWin() {
-
-        boolean endGame = false;
-        Shape[] temporaryArray = gameStatus.getGameBoard();
-
-        if (temporaryArray[0] == temporaryArray[1] && temporaryArray[1] == temporaryArray[2] && temporaryArray[0] != null ||
-                temporaryArray[3] == temporaryArray[4] && temporaryArray[3] == temporaryArray[5] && temporaryArray[3] != null ||
-                temporaryArray[6] == temporaryArray[7] && temporaryArray[6] == temporaryArray[8] && temporaryArray[6] != null ||
-                temporaryArray[0] == temporaryArray[3] && temporaryArray[0] == temporaryArray[6] && temporaryArray[0] != null ||
-                temporaryArray[1] == temporaryArray[4] && temporaryArray[1] == temporaryArray[7] && temporaryArray[1] != null ||
-                temporaryArray[2] == temporaryArray[5] && temporaryArray[2] == temporaryArray[8] && temporaryArray[2] != null ||
-                temporaryArray[0] == temporaryArray[4] && temporaryArray[0] == temporaryArray[8] && temporaryArray[0] != null ||
-                temporaryArray[2] == temporaryArray[4] && temporaryArray[2] == temporaryArray[6]&& temporaryArray[2] != null) {
-
-            endGame = true;
-        }
-        return endGame;
-    }
-
-    public int computerMoveGenerator() {
+    private int computerMoveGenerator() {
         Random computerMoveGenerator = new Random();
-        int computerMove = computerMoveGenerator.nextInt(9) +1;
-        return computerMove;
+        return computerMoveGenerator.nextInt(9) +1;
     }
 
-    public String computerMove() {
+    private String computerMoveInString() {
 
         boolean correctMove = false;
         Shape[] temporaryArray = gameStatus.getGameBoard();
@@ -95,7 +76,22 @@ public class GameMechanics {
         return "#" + computerMoveInInt;
     }
 
-    public void changePlayer() {
+    public void computerClickButton(GridPane gridPane) {
+        Button computerButton = (Button) gridPane.lookup(computerMoveInString());
+        computerButton.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
+        computerButton.setDisable(true);
+
+        gameStatus.setRoundNumber(gameStatus.getRoundNumber()+1);
+
+        if(gameValidator.checkDidYouWin(gameStatus.getGameBoard())) {
+            gameStatus.setEndGame(true);
+            createMessageBox();
+        }
+
+        changePlayer();
+    }
+
+    private void changePlayer() {
         Player temporaryPlayer = gameStatus.getActualPlayer();
 
         gameStatus.setActualPlayer(gameStatus.getSecondPlayer());
@@ -109,9 +105,17 @@ public class GameMechanics {
         alert.setHeaderText("Koniec gry");
         alert.setContentText("Wygral " + gameStatus.getActualPlayer());
         alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
+            if (rs == ButtonType.OK) {}
+        });
+    }
 
-            }
+    public void createDrawBox() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Draw", ButtonType.OK);
+        alert.setTitle("Koniec gry");
+        alert.setHeaderText("Koniec gry");
+        alert.setContentText("Nikt nie wygral. Remis!");
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {}
         });
     }
 }

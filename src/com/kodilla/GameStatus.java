@@ -6,6 +6,7 @@ public class GameStatus {
     private Player secondPlayer;
     private Shape[] gameBoard;
     private int roundNumber;
+    private boolean endGame;
 
     public GameStatus(Player actualPlayer) {
         this.actualPlayer = actualPlayer;
@@ -17,6 +18,7 @@ public class GameStatus {
         }
         roundNumber = 0;
         gameBoard = new Shape[9];
+        endGame = false;
     }
 
     public Player getActualPlayer() {
@@ -45,5 +47,13 @@ public class GameStatus {
 
     public int getRoundNumber() {
         return roundNumber;
+    }
+
+    public void setEndGame(boolean endGame) {
+        this.endGame = endGame;
+    }
+
+    public boolean getEndGame() {
+        return endGame;
     }
 }
