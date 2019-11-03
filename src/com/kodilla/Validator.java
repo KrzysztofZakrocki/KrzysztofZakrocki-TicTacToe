@@ -3,9 +3,9 @@ package com.kodilla;
 public class Validator {
 
     public boolean checkDidYouWin(Shape[] gameBoard) {
-        return checkFirstRow(gameBoard) == true || checkSecondRow(gameBoard) == true || checkThirdRow(gameBoard) == true ||
-                checkFirstCol(gameBoard) == true || checkSecondCol(gameBoard) == true || checkThirdCol(gameBoard) == true ||
-                checkFirstSlant(gameBoard) == true || checkSecondSlant(gameBoard) == true;
+        return checkFirstRow(gameBoard) || checkSecondRow(gameBoard) || checkThirdRow(gameBoard) ||
+                checkFirstCol(gameBoard) || checkSecondCol(gameBoard) || checkThirdCol(gameBoard) ||
+                checkFirstSlant(gameBoard) || checkSecondSlant(gameBoard);
     }
 
     private Boolean checkFirstRow(Shape[] gameBoard) {

@@ -149,7 +149,6 @@ public class TicTacToe extends Application {
         alert.setHeaderText("Witaj w grze w kolko i krzyzyk");
         alert.setContentText("Przed rozpoczeciem gry wybierz gracza rozpoczynajacego oraz jego symbol. Nastepnie kliknij przycisk nowej gry.");
         alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {}
         });
     }
 

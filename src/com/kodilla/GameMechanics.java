@@ -23,7 +23,7 @@ public class GameMechanics {
 
     public void clickButton(Button button, GridPane gridPane) {
 
-        if(gameStatus.getEndGame() == false) {
+        if(!gameStatus.getEndGame()) {
             int id = Integer.parseInt(button.getId());
             button.setGraphic(new ImageView(gameStatus.getActualPlayer().getActualShape().getShape()));
             setCrossAndCircleInButtonsBasedId(id);
@@ -37,11 +37,11 @@ public class GameMechanics {
             changePlayer();
         }
 
-        if (gameStatus.getRoundNumber() != 9 && gameStatus.getEndGame() == false) {
+        if (gameStatus.getRoundNumber() != 9 && !gameStatus.getEndGame()) {
             computerClickButton(gridPane);
         }
 
-        if (gameStatus.getRoundNumber() == 9 && gameStatus.getEndGame() == false) {
+        if (gameStatus.getRoundNumber() == 9 && !gameStatus.getEndGame()) {
             createDrawBox();
         }
     }
